@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% load static %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/tools/tool-index.css' %}"
+/>
+{% endblock %} {% block content %}
+
+<section class="page-header">
+  <h1>All Tools</h1>
+</section>
+
+<section class="card-container">
+  {% for tool in tools %}
+  <div class="card">
+    <div class="card-content">
+      <h2 class="card-title">{{ tool.name }}</h2>
+      <p><small>{{ tool.brand }}</small></p>
+      <p><small>{{ tool.description }}</small></p>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+{% endblock %}
