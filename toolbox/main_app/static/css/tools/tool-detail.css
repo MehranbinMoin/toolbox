@@ -58,7 +58,7 @@
 }
 
 .tool-section {
-    border: 20px solid #ff0000;
+    border: 2px solid #333;
     border-radius: 10px;
     padding: 25px;
     margin-bottom: 25px;
@@ -68,6 +68,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: #333;
 }
 
 .tool-details {
@@ -101,6 +102,7 @@
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
+    color: #333;
 }
 
 .tool-actions {
@@ -114,6 +116,7 @@
     margin-bottom: 25px;
     background: white;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: #333;
 }
 
 .reservation-form form {
@@ -152,6 +155,7 @@
     margin-bottom: 25px;
     background: white;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: #333;
 }
 
 .reservation-block {

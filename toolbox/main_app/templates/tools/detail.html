@@ -3,21 +3,81 @@
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/tools/tool-detail.css' %}" />
 {% endblock %}
+
 {% block content %}
-<section class="tool-container">
-    <div class="cat-details">
-        <h1>{{ tool.name }}</h1>
-        <img src="{{ tool.image.url }}" alt="{{ tool.name }}"/>
-        <p>{{ tool.is_available }}</p>
-        <p>{{ tool.description }}</p>
-        <p>{{tool.owner}}</p>
-        <p>{{tool.created_at}}</p>
-        <p>{{tool.updated_at}}</p>
+
+<div class="tool-section">
+    <div class="tool-details">
+        <h1 class="section-title">{{ tool.name }}</h1>
+        {% if tool.image %}
+            <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-img"/>
+        {% endif %}
+        <p><strong>Available:</strong> {% if tool.is_available %}Yes{% else %}No{% endif %}</p>
+        <p><strong>Description:</strong> {{ tool.description }}</p>
+        <p><strong>Owner:</strong> {{ tool.owner }}</p>
+        <p><strong>Created:</strong> {{ tool.created_at }}</p>
+        <p><strong>Updated:</strong> {{ tool.updated_at }}</p>
+        
+        <div class="tool-actions">
+            <a href="{% url 'tool-update' tool.id %}" class="btn warn">Edit</a>
+            <a href="{% url 'tool-delete' tool.id %}" class="btn danger">Delete</a>
+        </div>
     </div>
-</section>
-<div class="tool-actions">
-    <a href="{% url 'tool-update' tool.id %}" class="btn warn">Edit</a>
-    <a href="{% url 'tool-delete' tool.id %}" class="btn danger">Delete</a>
-  </div>
 </div>
+
+{% if user.is_authenticated and tool.is_available %}
+<div class="reservation-section">
+    <h2 class="section-title">Make a Reservation</h2>
+    <div class="reservation-form">
+        <form method="post" action="{% url 'add-reservation' tool.id %}">
+            {% csrf_token %}
+            {{ reservation_form.as_p }}
+            <button type="submit">Reserve Tool</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<div class="comments-section-box">
+    <h2 class="section-title">Reservations & Comments</h2>
+    
+    {% if reservations_with_comments %}
+        {% for reservation in reservations_with_comments %}
+            <div class="reservation-block">
+                <h3>Reservation by {{ reservation.user.username }}</h3>
+                <p><strong>Period:</strong> {{ reservation.start_date|date:"M d, Y" }} to {{ reservation.end_date|date:"M d, Y" }}</p>
+                {% if reservation.notes %}
+                    <p><strong>Notes:</strong> {{ reservation.notes }}</p>
+                {% endif %}
+                
+                {% if reservation.comments.all %}
+                    <div class="comments">
+                        <h4>Comments:</h4>
+                        {% for comment in reservation.comments.all %}
+                            <div class="comment">
+                                <strong>{{ comment.author.username }}:</strong>
+                                <p>{{ comment.content }}</p>
+                                <small>{{ comment.created_at|date:"M d, Y g:i A" }}</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+            
+                {% if user.is_authenticated %}
+                <div class="add-comment">
+                    <form method="post" action="{% url 'add-comment' reservation.id %}">
+                        {% csrf_token %}
+                        <textarea name="content" placeholder="Add a comment..." rows="3" required></textarea>
+                        <button type="submit">Add Comment</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No reservations or comments yet.</p>
+    {% endif %}
+</div>
+
 {% endblock %}
