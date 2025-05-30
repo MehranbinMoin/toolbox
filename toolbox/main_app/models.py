@@ -20,7 +20,6 @@ class Reservation(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     notes = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -34,4 +33,4 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"Comment by {self.author.username} on {self.reservation.title}"
+        return f"Comment by {self.author.username}."

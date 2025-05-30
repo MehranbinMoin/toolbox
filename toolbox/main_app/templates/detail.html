@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/tools/tool-detail.css' %}" />
+{% endblock %}
+{% block content %}
+<section class="tool-container">
+    <div class="cat-details">
+        <h1>{{ tool.name }}</h1>
+        <p>{{ tool.image }}</p>
+        <p>{{ tool.is_available }}</p>
+        <p>{{ tool.description }}</p>
+        <p>{{tool.owner}}</p>
+        <p>{{tool.created_at}}</p>
+        <p>{{tool.updated_at}}</p>
+    </div>
+</section>
+{% endblock %}
