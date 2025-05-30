@@ -10,6 +10,7 @@ tools = [
     Tool('Wrench', 'Stanley', 'A wrench is a tool used to tighten or loosen bolts, nuts, and other fasteners.'),
     Tool('Screwdriver', 'Stanley', 'A screwdriver is a tool used to tighten or loosen screws.'),
     Tool('Hammer', 'Stanley', 'A hammer is a tool used to drive nails into wood.'),
+    Tool('Chisel', 'Stanley', 'A chisel is a tool used to carve wood.'),
 ]
 
 def tools_index(request):
