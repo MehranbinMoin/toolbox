@@ -7,7 +7,7 @@
 <section class="tool-container">
     <div class="cat-details">
         <h1>{{ tool.name }}</h1>
-        <p>{{ tool.image }}</p>
+        <img src="{{ tool.image.url }}" alt="{{ tool.name }}"/>
         <p>{{ tool.is_available }}</p>
         <p>{{ tool.description }}</p>
         <p>{{tool.owner}}</p>
@@ -15,4 +15,9 @@
         <p>{{tool.updated_at}}</p>
     </div>
 </section>
+<div class="tool-actions">
+    <a href="{% url 'tool-update' tool.id %}" class="btn warn">Edit</a>
+    <a href="{% url 'tool-delete' tool.id %}" class="btn danger">Delete</a>
+  </div>
+</div>
 {% endblock %}

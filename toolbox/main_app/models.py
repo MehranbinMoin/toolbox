@@ -1,11 +1,12 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User 
 from cloudinary.models import CloudinaryField
 
 class Tool(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    image = CloudinaryField('image', blank=True, null=True)
+    image = CloudinaryField('image')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tools')
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -13,6 +14,9 @@ class Tool(models.Model):
     
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('tool-detail', kwargs={'tool_id': self.id})
 
 class Reservation(models.Model):
     tool = models.ForeignKey(Tool, on_delete=models.CASCADE, related_name='reservations')

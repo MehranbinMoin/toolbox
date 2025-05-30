@@ -1,5 +1,21 @@
 from django.shortcuts import render
 from .models import Tool
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Tool
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+
+class ToolCreate(CreateView):
+    model = Tool
+    fields = '__all__'
+
+class ToolUpdate(UpdateView):
+    model = Tool
+    fields = '__all__'
+
+class ToolDelete(DeleteView):
+    model = Tool
+    success_url = '/tools/'
 
 def tools_index(request):
     tools = Tool.objects.all()
