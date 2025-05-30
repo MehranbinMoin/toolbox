@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 class Tool:
     def __init__(self, name, brand, description):
@@ -17,11 +16,9 @@ def tools_index(request):
     return render(request, 'tools/index.html', {'tools': tools})
 
 def home(request):
-    return HttpResponse('<h1>toolbox</h1>')
+    return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html') 
 
-def tools_simple (request):
-    return HttpResponse('<h1>All available tools</h1>')
 
