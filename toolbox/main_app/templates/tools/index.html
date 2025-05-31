@@ -1,24 +1,41 @@
-{% extends 'base.html' %} {% load static %} {% block head %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
 <link rel="stylesheet" href="{% static 'css/tools/tool-index.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %}
 
+{% block content %}
 <section class="page-header">
-
     <h1>All Tools</h1>
 </section>
 
 <section class="card-container">
     {% for tool in tools %}
-    <a href="{% url 'tool-detail' tool.id %}">
-        <div class="card">
+    <div class="card">
+        <a href="{% url 'tool-detail' tool.id %}" class="card-link">
+            {% if tool.image %}
+                <div class="card-image">
+                    <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-img">
+                </div>
+            {% endif %}
             <div class="card-content">
                 <h2 class="card-title">{{ tool.name }}</h2>
-                <p><small>{{ tool.brand }}</small></p>
-                <p><small>{{ tool.description }}</small></p>
+                {% if tool.brand %}
+                    <p class="card-brand">{{ tool.brand }}</p>
+                {% endif %}
+                <p class="card-description">{{ tool.description|truncatewords:15 }}</p>
+                <div class="card-meta">
+                    <span class="availability {% if tool.is_available %}available{% else %}unavailable{% endif %}">
+                        {% if tool.is_available %}Available{% else %}Unavailable{% endif %}
+                    </span>
+                    <span class="owner">By {{ tool.owner.username }}</span>
+                </div>
             </div>
-        </div>
-    </a>
+        </a>
+    </div>
+    {% empty %}
+    <p class="no-tools">No tools available yet.</p>
     {% endfor %}
 </section>
-
 {% endblock %}
