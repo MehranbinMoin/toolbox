@@ -5,6 +5,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.forms.models import model_to_dict
 from django.contrib import messages
 from .forms import ReservationForm, CommentForm
+from django.db.models import Q
+
 
 class ToolCreate(CreateView):
     model = Tool
@@ -20,7 +22,21 @@ class ToolDelete(DeleteView):
 
 def tools_index(request):
     tools = Tool.objects.all()
-    return render(request, 'tools/index.html', {'tools': tools})
+    search_query = request.GET.get('search', '').strip()
+    
+    if search_query:
+        tools = tools.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        ).distinct()
+    tools = tools.order_by('-is_available', 'name')
+    
+    context = {
+        'tools': tools,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'tools/index.html', context)
 
 def home(request):
     return render(request, 'home.html')

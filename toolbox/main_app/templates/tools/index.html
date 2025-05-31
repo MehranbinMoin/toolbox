@@ -1,29 +1,54 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/tools/tool-index.css' %}" />
 {% endblock %}
-
 {% block content %}
 <section class="page-header">
     <h1>All Tools</h1>
+    <div class="search-container">
+        <form method="GET" action="{% url 'tools-index' %}" class="search-form">
+            <div class="search-input-wrapper">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Search tools by name or description..." 
+                    value="{{ request.GET.search }}"
+                    class="search-input"
+                    id="searchInput"
+                >
+                <button type="submit" class="search-button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                {% if request.GET.search %}
+                <a href="{% url 'tools-index' %}" class="clear-search" title="Clear search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                {% endif %}
+            </div>
+        </form>
+        {% if request.GET.search %}
+        <div class="search-results-info">
+            <p>Showing results for "<span class="search-term">{{ request.GET.search }}</span>"</p>
+        </div>
+        {% endif %}
+    </div>
 </section>
-
 <section class="card-container">
     {% for tool in tools %}
     <div class="card">
         <a href="{% url 'tool-detail' tool.id %}" class="card-link">
             {% if tool.image %}
-                <div class="card-image">
-                    <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-img">
-                </div>
+            <div class="card-image">
+                <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-img">
+            </div>
             {% endif %}
             <div class="card-content">
                 <h2 class="card-title">{{ tool.name }}</h2>
-                {% if tool.brand %}
-                    <p class="card-brand">{{ tool.brand }}</p>
-                {% endif %}
                 <p class="card-description">{{ tool.description|truncatewords:15 }}</p>
                 <div class="card-meta">
                     <span class="availability {% if tool.is_available %}available{% else %}unavailable{% endif %}">
@@ -35,7 +60,13 @@
         </a>
     </div>
     {% empty %}
-    <p class="no-tools">No tools available yet.</p>
+    <p class="no-tools">
+        {% if request.GET.search %}
+            No tools found matching "{{ request.GET.search }}".
+        {% else %}
+            No tools available yet.
+        {% endif %}
+    </p>
     {% endfor %}
 </section>
 {% endblock %}
