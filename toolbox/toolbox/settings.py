@@ -90,3 +90,7 @@ cloudinary.config(
     api_key=CLOUDINARY_STORAGE['API_KEY'],
     api_secret=CLOUDINARY_STORAGE['API_SECRET'],
 )
+
+LOGIN_URL = 'home'
+LOGIN_REDIRECT_URL = 'tools-index'
+LOGOUT_REDIRECT_URL = 'home'

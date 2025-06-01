@@ -6,20 +6,36 @@ from django.forms.models import model_to_dict
 from django.contrib import messages
 from .forms import ReservationForm, CommentForm
 from django.db.models import Q
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class ToolCreate(CreateView):
+class ToolCreate(LoginRequiredMixin, CreateView):
     model = Tool
     fields = '__all__'
 
-class ToolUpdate(UpdateView):
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  
+        return super().form_valid(form)
+
+class ToolUpdate(LoginRequiredMixin,UpdateView):
     model = Tool
     fields = '__all__'
 
-class ToolDelete(DeleteView):
+    def get_queryset(self):
+        return Tool.objects.filter(owner=self.request.user)
+
+class ToolDelete(LoginRequiredMixin,DeleteView):
     model = Tool
     success_url = '/tools/'
 
+    def get_queryset(self):
+        return Tool.objects.filter(owner=self.request.user)
+
+@login_required
 def tools_index(request):
     tools = Tool.objects.all()
     search_query = request.GET.get('search', '').strip()
@@ -38,12 +54,13 @@ def tools_index(request):
     
     return render(request, 'tools/index.html', context)
 
-def home(request):
-    return render(request, 'home.html')
+class Home(LoginView):
+    template_name = 'home.html'
 
 def about(request):
     return render(request, 'about.html')
 
+@login_required
 def tool_detail(request, tool_id):
     tool = get_object_or_404(Tool, id=tool_id)
     reservations_with_comments = tool.reservations.prefetch_related('comments__author').all()
@@ -169,3 +186,18 @@ def delete_comment(request, comment_id):
         'tool': comment.reservation.tool,
     }
     return render(request, 'comments/confirm_delete.html', context)
+
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('tools-index')
+        else:
+            error_message = 'Invalid sign up - please try again'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'signup.html', context)
+  

@@ -15,10 +15,12 @@
 <p><strong>Owner:</strong> {{ tool.owner }}</p>
 <p><strong>Created:</strong> {{ tool.created_at }}</p>
 <p><strong>Updated:</strong> {{ tool.updated_at }}</p>
+{% if user.is_authenticated and tool.owner == user %}
 <div class="tool-actions">
 <a href="{% url 'tool-update' tool.id %}" class="btn warn">Edit</a>
 <a href="{% url 'tool-delete' tool.id %}" class="btn danger">Delete</a>
 </div>
+{% endif %}
 </div>
 </div>
 {% if user.is_authenticated and tool.is_available %}
