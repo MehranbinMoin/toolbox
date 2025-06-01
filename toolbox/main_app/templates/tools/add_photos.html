@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}" />
+<link rel="stylesheet" href="{% static 'css/photo-upload.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Add Photos to {{ tool.name }}</h1>
+</div>
+
+<div class="form-container">
+    <form method="post" enctype="multipart/form-data" id="photo-form">
+        {% csrf_token %}
+
+        <div class="upload-area" id="upload-area">
+            <input type="file" name="images" multiple accept="image/*" id="photo-input" max="5">
+            <label for="photo-input" class="upload-label">
+                <span>📷</span>
+                <p>Click to select photos or drag and drop</p>
+                <small>Select up to 5 photos (JPG, PNG, GIF)</small>
+            </label>
+        </div>
+
+        <div id="preview-container"></div>
+
+        <div id="file-info" class="file-info" style="display: none;">
+            <p><strong>Selected files:</strong> <span id="file-count">0</span>/5</p>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="btn" id="submit-btn" disabled>Upload Photos</button>
+            <a href="{% url 'tool-detail' tool.id %}" class="btn secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    const photoInput = document.getElementById('photo-input');
+    const previewContainer = document.getElementById('preview-container');
+    const uploadArea = document.getElementById('upload-area');
+    const fileInfo = document.getElementById('file-info');
+    const fileCount = document.getElementById('file-count');
+    const submitBtn = document.getElementById('submit-btn');
+
+    let selectedFiles = [];
+
+    photoInput.addEventListener('change', function (e) {
+        handleFiles(Array.from(e.target.files));
+    });
+
+    uploadArea.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', function (e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(Array.from(e.dataTransfer.files));
+    });
+
+    function handleFiles(files) {
+        const imageFiles = files.filter(file => file.type.startsWith('image/')).slice(0, 5);
+        selectedFiles = imageFiles;
+        updateFileInfo();
+        createPreviews();
+    }
+
+    function updateFileInfo() {
+        fileCount.textContent = selectedFiles.length;
+        fileInfo.style.display = selectedFiles.length > 0 ? 'block' : 'none';
+        submitBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function createPreviews() {
+        previewContainer.innerHTML = '';
+
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.createElement('div');
+                preview.className = 'photo-preview';
+                preview.innerHTML = `
+                <button type="button" class="remove-photo" onclick="removePhoto(${index})">×</button>
+                <img src="${e.target.result}" alt="Preview">
+                <input type="text" name="caption_${index}" placeholder="Caption (optional)" class="caption-input">
+            `;
+                previewContainer.appendChild(preview);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function removePhoto(index) {
+        selectedFiles.splice(index, 1);
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        photoInput.files = dt.files;
+        updateFileInfo();
+        createPreviews();
+    }
+
+    document.getElementById('photo-form').addEventListener('submit', function (e) {
+        if (selectedFiles.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one photo to upload.');
+            return;
+        }
+
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        photoInput.files = dt.files;
+
+        submitBtn.textContent = 'Uploading...';
+        submitBtn.disabled = true;
+    });
+</script>
+{% endblock %}

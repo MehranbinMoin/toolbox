@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Tool, Reservation, Comment 
+from .models import Tool, Reservation, Comment, ToolPhoto 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.forms.models import model_to_dict
 from django.contrib import messages
@@ -20,6 +20,31 @@ class ToolCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user  
         return super().form_valid(form)
+    
+@login_required
+def add_photos(request, tool_id):
+    tool = get_object_or_404(Tool, id=tool_id, owner=request.user)
+    
+    if request.method == 'POST':
+        images = request.FILES.getlist('images')
+        for i, image in enumerate(images):
+            caption = request.POST.get(f'caption_{i}', '')
+            ToolPhoto.objects.create(
+                tool=tool,
+                image=image,
+                caption=caption,
+                order=i
+            )
+        return redirect('tool-detail', tool_id=tool.id)
+    
+    return render(request, 'tools/add_photos.html', {'tool': tool})
+
+@login_required
+def delete_photo(request, photo_id):
+    photo = get_object_or_404(ToolPhoto, id=photo_id, tool__owner=request.user)
+    tool_id = photo.tool.id
+    photo.delete()
+    return redirect('tool-detail', tool_id=tool_id)   
 
 class ToolUpdate(LoginRequiredMixin,UpdateView):
     model = Tool

@@ -2,6 +2,7 @@ from pathlib import Path
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1q55tr0+m&jm3)a01v6l%j=_^*sv@z_sc%7ia@#f#h9hy39h)2'
@@ -79,16 +80,18 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dsnppvdae',
-    'API_KEY': '426563339382814',
-    'API_SECRET': '4iBuGsmDArzddLL_RMp9vtK8pFQ',
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key=CLOUDINARY_STORAGE['API_KEY'],
     api_secret=CLOUDINARY_STORAGE['API_SECRET'],
+    secure=True
 )
 
 LOGIN_URL = 'home'

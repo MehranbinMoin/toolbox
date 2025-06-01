@@ -18,6 +18,19 @@ class Tool(models.Model):
 
     def get_absolute_url(self):
         return reverse('tool-detail', kwargs={'tool_id': self.id})
+    
+class ToolPhoto(models.Model):
+    tool = models.ForeignKey(Tool, on_delete=models.CASCADE, related_name='photos')
+    image = CloudinaryField('image')
+    caption = models.CharField(max_length=200, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    order = models.PositiveIntegerField(default=0) 
+
+    class Meta:
+        ordering = ['order', 'uploaded_at']
+
+    def __str__(self):
+        return f"Photo for {self.tool.name}"    
 
 class Reservation(models.Model):
     tool = models.ForeignKey(Tool, on_delete=models.CASCADE, related_name='reservations')
