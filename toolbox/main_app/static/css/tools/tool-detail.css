@@ -596,19 +596,121 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .tool-section,
-    .reservation-section,
-    .comments-section-box {
+    .tool-section {
         background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: #ecf0f1;
+        color: #f8f9fa;
         border-color: #4a5568;
+    }
+    
+    .tool-details h1 {
+        color: #ffffff;
+    }
+    
+    .tool-details h2,
+    .tool-details h3 {
+        color: #e9ecef;
+    }
+    
+    .tool-details p {
+        color: #d1d5db;
+    }
+    
+    .tool-details p strong {
+        color: #ffffff;
+    }
+    
+    .section-title {
+        color: #ffffff;
+        border-color: #6c757d;
+    }
+    
+    .section-title::after {
+        background: linear-gradient(90deg, #4dabf7, #339af0);
+    }
+    
+    .tool-actions {
+        border-color: #6c757d;
+    }
+    
+    .reservation-section {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+        color: #f8f9fa;
+        border-color: #4a90e2;
+    }
+    
+    .reservation-form input[type="datetime-local"],
+    .reservation-form textarea {
+        background: #374151;
+        color: #f8f9fa;
+        border-color: #6b7280;
+    }
+    
+    .reservation-form input[type="datetime-local"]:focus,
+    .reservation-form textarea:focus {
+        border-color: #4dabf7;
+        box-shadow: 0 0 0 3px rgba(77,171,247,0.2);
+    }
+    
+    .comments-section-box {
+        background: linear-gradient(135deg, #1a4d3a 0%, #28a745 100%);
+        color: #f8f9fa;
+        border-color: #48bb78;
     }
     
     .reservation-block,
     .comment {
-        background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-        color: #ecf0f1;
-        border-color: #4a5568;
+        background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+        color: #f8f9fa;
+        border-color: #6b7280;
+    }
+    
+    .reservation-block h3 {
+        color: #ffffff;
+    }
+    
+    .reservation-block p,
+    .comment p {
+        color: #d1d5db;
+    }
+    
+    .reservation-block p strong,
+    .comment strong {
+        color: #ffffff;
+    }
+    
+    .reservation-header {
+        border-color: #6b7280;
+    }
+    
+    .comments {
+        border-color: #6b7280;
+    }
+    
+    .comments h4 {
+        color: #e9ecef;
+    }
+    
+    .comment {
+        border-left-color: #4dabf7;
+    }
+    
+    .comment small {
+        color: #9ca3af;
+    }
+    
+    .add-comment {
+        border-color: #6b7280;
+    }
+    
+    .add-comment textarea {
+        background: #374151;
+        color: #f8f9fa;
+        border-color: #6b7280;
+    }
+    
+    .add-comment textarea:focus {
+        border-color: #48bb78;
+        box-shadow: 0 0 0 3px rgba(72,187,120,0.2);
     }
     
     .btn {
@@ -619,8 +721,9 @@
         box-shadow: 0 6px 12px rgba(0,0,0,0.4);
     }
     
-    .section-title {
-        color: #ecf0f1;
-        border-color: #4a5568;
+    .errorlist {
+        background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+        color: #fca5a5;
+        border-color: #dc2626;
     }
 }
