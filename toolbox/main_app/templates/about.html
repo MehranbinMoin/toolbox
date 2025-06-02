@@ -5,42 +5,54 @@
 {% endblock %}
 
 {% block content %}
-<div class="about-hero">
-    <h1>About toolbox</h1>
-    <p class="about-tagline">Share a tool and build community!</p>
+
+<div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+        <source src="https://res.cloudinary.com/dsnppvdae/video/upload/BackgroundVideo_ghaglj.mp4" type="video/mp4">
+        
+        Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
 </div>
 
-<div class="features-grid">
-    <div class="feature-card">
-        <span class="feature-icon">🛠️</span>
-        <h3>Share Your Tools</h3>
-        <p>List your tools and make them available to your community. Help others by sharing what you have.</p>
+<div class="content-wrapper">
+    <div class="about-hero">
+        <h1>About toolbox</h1>
+        <p class="about-tagline">Share a tool and build community!</p>
     </div>
-    
-    <div class="feature-card">
-        <span class="feature-icon">🤝</span>
-        <h3>Build Community</h3>
-        <p>Connect with neighbors and friends. Build relationships through sharing and collaboration.</p>
-    </div>
-    
-    <div class="feature-card">
-        <span class="feature-icon">♻️</span>
-        <h3>Reduce Waste</h3>
-        <p>Why buy when you can borrow? Save money and reduce environmental impact through sharing.</p>
-    </div>
-    
-    <div class="feature-card">
-        <span class="feature-icon">📱</span>
-        <h3>Easy to Use</h3>
-        <p>Simple, intuitive interface makes sharing tools effortless. Add, browse, and reserve in seconds.</p>
-    </div>
-</div>
 
-<div class="cta-section">
-    <h2>Ready to Get Started?</h2>
-    <p>Join our community today and start sharing tools with your neighbors. It's free, easy, and makes a difference!</p>
-    {% if not user.is_authenticated %}
-        <a href="{% url 'signup' %}" class="cta-button">Sign Up Now</a>
-    {% endif %}
+    <div class="features-grid">
+        <div class="feature-card">
+            <span class="feature-icon">🛠️</span>
+            <h3>Share Your Tools</h3>
+            <p>List your tools and make them available to your community. Help others by sharing what you have.</p>
+        </div>
+        
+        <div class="feature-card">
+            <span class="feature-icon">🤝</span>
+            <h3>Build Community</h3>
+            <p>Connect with neighbors and friends. Build relationships through sharing and collaboration.</p>
+        </div>
+        
+        <div class="feature-card">
+            <span class="feature-icon">♻️</span>
+            <h3>Reduce Waste</h3>
+            <p>Why buy when you can borrow? Save money and reduce environmental impact through sharing.</p>
+        </div>
+        
+        <div class="feature-card">
+            <span class="feature-icon">📱</span>
+            <h3>Easy to Use</h3>
+            <p>Simple, intuitive interface makes sharing tools effortless. Add, browse, and reserve in seconds.</p>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2>Ready to Get Started?</h2>
+        <p>Join our community today and start sharing tools with your neighbors. It's free, easy, and makes a difference!</p>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'signup' %}" class="cta-button">Sign Up Now</a>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
