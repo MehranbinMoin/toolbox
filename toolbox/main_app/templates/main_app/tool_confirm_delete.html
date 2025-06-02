@@ -1,17 +1,59 @@
-{% extends 'base.html' %}  
-{% load static %} 
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/delete-confirmation.css' %}" />
+{% endblock %}
+
 {% block content %}
-
-<div class="page-header">
-  <h1>Delete Tool?</h1>
+<div class="delete-overlay">
+    <div class="delete-modal">
+        <div class="modal-header">
+            <div class="warning-icon">⚠️</div>
+            <h1>Delete Tool</h1>
+        </div>
+        
+        <div class="modal-content">
+            <div class="tool-preview">
+                {% if tool.photos.first %}
+                    <img src="{{ tool.photos.first.image.url }}" alt="{{ tool.name }}" class="tool-preview-image">
+                {% elif tool.image %}
+                    <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-preview-image">
+                {% else %}
+                    <div class="tool-preview-placeholder">
+                        <span>🛠️</span>
+                    </div>
+                {% endif %}
+                <div class="tool-info">
+                    <h2>{{ tool.name }}</h2>
+                    <p>{{ tool.description|truncatewords:15 }}</p>
+                </div>
+            </div>
+            
+            <div class="warning-message">
+                <p>This action cannot be undone. All data associated with this tool will be permanently deleted, including:</p>
+                <ul>
+                    <li>Tool information and photos</li>
+                    <li>All reservations</li>
+                    <li>Comments and reviews</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="modal-actions">
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <div class="button-group">
+                    <a href="{% url 'tool-detail' tool.id %}" class="btn cancel">
+                        <span class="btn-icon">↩️</span>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn delete">
+                        <span class="btn-icon">🗑️</span>
+                        Delete Forever
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-<h2>Are you sure you want to delete {{ tool.name }}?</h2>
-
-<form action="" method="post" class="form">
-  {% csrf_token %}
-  <a href="{% url 'tool-detail' tool.id %}" class="btn secondary">Cancel</a>
-  <button type="submit" class="btn danger">Yes, delete!</button>
-</form>
-
 {% endblock %}
