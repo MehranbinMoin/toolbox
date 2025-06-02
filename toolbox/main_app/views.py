@@ -62,7 +62,7 @@ class ToolDelete(LoginRequiredMixin,DeleteView):
 
 @login_required
 def tools_index(request):
-    tools = Tool.objects.all()
+    tools = Tool.objects.all().prefetch_related('photos')
     search_query = request.GET.get('search', '').strip()
     
     if search_query:
