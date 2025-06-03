@@ -1,20 +1,57 @@
-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    height: 100%;
-    min-height: calc(100vh - 120px);
-    padding: 20px;
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    overflow: hidden;
 }
 
-main > section {
+.background-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px 8px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); 
+    z-index: -1;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+    padding: 2rem;
 }
 
 .header-logo-container {
@@ -22,23 +59,36 @@ main > section {
 }
 
 .logo-container {
-    max-width: 375px;
+    background: none;
+    padding: 1.5rem 2rem;
+    width: 100%;
     text-align: center;
-    margin-bottom: 40px;
+    max-width: none;
+    margin-bottom: 0;
+    border-radius: 0;
 }
 
 .tool-container {
-    width: 80%;
-    margin-bottom: 20px;
+    width: auto;
+    margin-bottom: 15px; 
+    display: flex;
+    justify-content: center; 
+}
+
+.tool-container img {
+    max-height: 120px; 
+    width: auto;
 }
 
 .logo-container h6 {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.1rem;
-    margin-top: 15px;
-    font-weight: 400;
+    color: white;
+    margin: 0.5rem 0 0 0;
+    font-size: 1.3rem; 
+    font-weight: 300;
     letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7); 
 }
+
 
 .login {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
@@ -207,13 +257,8 @@ main > section {
 }
 
 @media only screen and (min-width: 768px) {
-    main {
-        justify-content: space-around;
+    .login-section {
         padding: 40px;
-    }
-    
-    main > section {
-        width: 40%;
     }
     
     .login {
@@ -222,19 +267,24 @@ main > section {
         padding: 50px;
     }
     
-    .logo-container {
-        max-width: 520px;
-    }
-    
     .logo-container h6 {
         font-size: 1.3rem;
     }
 }
 
+@media (max-width: 768px) {
+    .login-section {
+        padding: 1rem;
+    }
+    
+    .logo-container {
+        padding: 1rem 1.5rem;
+    }
+}
+
 @media (max-width: 480px) {
-    main {
+    .login-section {
         padding: 15px;
-        min-height: calc(100vh - 100px);
     }
     
     .login {
@@ -249,8 +299,11 @@ main > section {
     }
     
     .logo-container {
-        max-width: 300px;
-        margin-bottom: 30px;
+        padding: 1rem;
+    }
+    
+    .logo-container h6 {
+        font-size: 1rem;
     }
 }
 

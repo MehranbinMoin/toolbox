@@ -1,27 +1,39 @@
-{% extends 'base.html' %} {% load static %} {% block head %}
-<link
-rel="stylesheet"
-href="{% static 'css/home.css' %}"
-/>
-{% endblock %} {% block content %}
-<section class="logo-container">
-<div class="tool-container">
-<img
-src="https://i.imgur.com/ht5Utap.png"
-alt="toolbox logo"
-/>
-</div>
-<h6>Share a tool and build community!</h6>
-</section>
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}" />
+{% endblock %}
+{% block content %}
 
-{% if not user.is_authenticated %}
-<section>
-<form action="{% url 'home' %}" method="post" class="login">
-<h1>Login</h1>
- {% csrf_token %} {{ form.as_p }}
-<input type="hidden" name="next" value="{{ next }}" />
-<button type="submit" class="btn submit">Login</button>
-</form>
-</section>
-{% endif %}
+<div class="video-background">
+    <video autoplay muted loop playsinline class="background-video">
+        <source src="https://res.cloudinary.com/dsnppvdae/video/upload/home_pqtwnb.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+</div>
+
+<div class="content-wrapper">
+    {% if not user.is_authenticated %}
+    <section class="login-section">
+        <form action="{% url 'home' %}" method="post" class="login">
+            <h1>Login</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{{ next }}" />
+            <button type="submit" class="btn submit">Login</button>
+        </form>
+    </section>
+    {% endif %}
+    
+    <section class="logo-container">
+        <div class="tool-container">
+            <img
+                src="https://i.imgur.com/ht5Utap.png"
+                alt="toolbox logo"
+            />
+        </div>
+        <h6>Share a tool and build community!</h6>
+    </section>
+</div>
 {% endblock %}
