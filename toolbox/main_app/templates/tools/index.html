@@ -44,13 +44,13 @@ id="searchInput"
 <a href="{% url 'tool-detail' tool.id %}" class="card-link">
 <div class="card-image">
     {% if tool.photos.first %}
-        <!-- Show first photo from new photo system -->
+       
         <img src="{{ tool.photos.first.image.url }}" alt="{{ tool.photos.first.caption|default:tool.name }}" class="tool-card-image">
     {% elif tool.image %}
-        <!-- Fallback to old single image field -->
+       
         <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-card-image">
     {% else %}
-        <!-- Show placeholder when no images -->
+        
         <div class="tool-card-placeholder">
             <span>🛠️</span>
         </div>
