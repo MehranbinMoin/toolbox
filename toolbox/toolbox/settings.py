@@ -3,11 +3,18 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from decouple import config
+from dotenv import load_dotenv
+import os
+import dj_database_url
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-1q55tr0+m&jm3)a01v6l%j=_^*sv@z_sc%7ia@#f#h9hy39h)2'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not 'ON_HEROKU' in os.environ:
+    DEBUG = True
+ALLOWED_HOSTS = ["*"]
+
 
 INSTALLED_APPS = [
     'main_app',
@@ -28,7 +35,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware", 
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+
 
 ROOT_URLCONF = 'toolbox.urls'
 
@@ -50,12 +60,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'toolbox.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'toolbox',
+if 'ON_HEROKU' in os.environ:
+    DATABASES = {
+        "default": dj_database_url.config(
+            env='DATABASE_URL',
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        ),
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'toolbox',
+        }
+    }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -78,6 +99,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "main_app" / "static",  
