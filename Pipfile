@@ -16,3 +16,6 @@ cloudinary = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+postinstall = "python manage.py collectstatic --noinput"
