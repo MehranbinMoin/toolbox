@@ -10,8 +10,8 @@ div.tool-section div.photo-carousel {
 div.tool-section div.photo-carousel div.carousel-container {
     position: relative !important;
     width: 100% !important;
-    height: 400px !important;
-    overflow: hidden !important;
+    height: 450px !important;
+    overflow: visible !important;
     border-radius: 16px !important;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05) !important;
@@ -40,7 +40,8 @@ div.tool-section div.photo-carousel div.carousel-slide {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
+    padding: 20px !important;
     opacity: 0 !important;
     visibility: hidden !important;
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out !important;
@@ -56,10 +57,20 @@ div.tool-section div.photo-carousel div.carousel-slide.active {
     display: flex !important;
 }
 
+.tool-section .photo-carousel .carousel-slide .image-container,
+div.tool-section div.photo-carousel div.carousel-slide .image-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    width: 100% !important;
+}
+
 .tool-section .photo-carousel .carousel-slide img,
 div.tool-section div.photo-carousel div.carousel-slide img {
     max-width: 500px !important;
-    max-height: 375px !important;
+    max-height: 320px !important;
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
@@ -81,6 +92,39 @@ div.tool-section div.photo-carousel div.carousel-slide img:hover {
     transform: scale(1.02) !important;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     border-color: rgba(255, 255, 255, 1) !important;
+}
+
+.tool-section .photo-carousel .carousel-slide .photo-caption,
+div.tool-section div.photo-carousel div.carousel-slide .photo-caption {
+    background: rgba(0, 0, 0, 0.85) !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 12px !important;
+    margin-top: 15px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    max-width: 480px !important;
+    width: calc(100% - 40px) !important;
+    display: block !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
+    line-height: 1.5 !important;
+    word-wrap: break-word !important;
+    hyphens: auto !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.tool-section .photo-carousel .carousel-slide .photo-caption:hover,
+div.tool-section div.photo-carousel div.carousel-slide .photo-caption:hover {
+    background: rgba(0, 0, 0, 0.95) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
 }
 
 .tool-section .photo-carousel .carousel-btn,
@@ -656,243 +700,6 @@ div.tool-section div.photo-carousel .dot.active {
     font-weight: 500;
 }
 
-@media only screen and (min-width: 768px) {
-    .tool-section {
-        padding: 35px 30px;
-        flex-direction: row;
-        align-items: center;
-        justify-content: start;
-    }
-
-    .tool-img {
-        width: 25%;
-        max-width: 250px;
-        margin-right: 25px;
-    }
-}
-
-@media (max-width: 768px) {
-    .reservation-section,
-    .reservation-block,
-    .comments-section-box {
-        padding: 18px;
-        margin: 16px 0;
-    }
-    
-    .tool-section {
-        padding: 20px;
-    }
-    
-    .btn {
-        padding: 8px 16px;
-        font-size: 13px;
-    }
-    
-    .btn-small {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-    
-    .btn-tiny {
-        padding: 4px 8px;
-        font-size: 11px;
-    }
-    
-    .reservation-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .reservation-actions {
-        margin-left: 0;
-        width: 100%;
-        justify-content: flex-start;
-    }
-    
-    .comment-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .comment-actions {
-        margin-left: 0;
-    }
-    
-    .tool-actions {
-        justify-content: center;
-        gap: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .tool-section,
-    .reservation-section,
-    .comments-section-box {
-        padding: 15px;
-        margin: 12px 0;
-    }
-    
-    .btn {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 8px;
-        justify-content: center;
-    }
-    
-    .btn-small,
-    .btn-tiny {
-        width: auto;
-        flex: 1;
-        min-width: 80px;
-    }
-    
-    .tool-actions {
-        flex-direction: column;
-        gap: 0;
-    }
-    
-    .reservation-actions,
-    .comment-actions {
-        flex-direction: row;
-        gap: 8px;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    .tool-section {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: #f8f9fa;
-        border-color: #4a5568;
-    }
-    
-    .tool-details h1 {
-        color: #ffffff;
-    }
-    
-    .tool-details h2,
-    .tool-details h3 {
-        color: #e9ecef;
-    }
-    
-    .tool-details p {
-        color: #d1d5db;
-    }
-    
-    .tool-details p strong {
-        color: #ffffff;
-    }
-    
-    .section-title {
-        color: #ffffff;
-        border-color: #6c757d;
-    }
-    
-    .section-title::after {
-        background: linear-gradient(90deg, #4dabf7, #339af0);
-    }
-    
-    .tool-actions {
-        border-color: #6c757d;
-    }
-    
-    .reservation-section {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
-        color: #f8f9fa;
-        border-color: #4a90e2;
-    }
-    
-    .reservation-form input[type="datetime-local"],
-    .reservation-form textarea {
-        background: #374151;
-        color: #f8f9fa;
-        border-color: #6b7280;
-    }
-    
-    .reservation-form input[type="datetime-local"]:focus,
-    .reservation-form textarea:focus {
-        border-color: #4dabf7;
-        box-shadow: 0 0 0 3px rgba(77,171,247,0.2);
-    }
-    
-    .comments-section-box {
-        background: linear-gradient(135deg, #1a4d3a 0%, #28a745 100%);
-        color: #f8f9fa;
-        border-color: #48bb78;
-    }
-    
-    .reservation-block,
-    .comment {
-        background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-        color: #f8f9fa;
-        border-color: #6b7280;
-    }
-    
-    .reservation-block h3 {
-        color: #ffffff;
-    }
-    
-    .reservation-block p,
-    .comment p {
-        color: #d1d5db;
-    }
-    
-    .reservation-block p strong,
-    .comment strong {
-        color: #ffffff;
-    }
-    
-    .reservation-header {
-        border-color: #6b7280;
-    }
-    
-    .comments {
-        border-color: #6b7280;
-    }
-    
-    .comments h4 {
-        color: #e9ecef;
-    }
-    
-    .comment {
-        border-left-color: #4dabf7;
-    }
-    
-    .comment small {
-        color: #9ca3af;
-    }
-    
-    .add-comment {
-        border-color: #6b7280;
-    }
-    
-    .add-comment textarea {
-        background: #374151;
-        color: #f8f9fa;
-        border-color: #6b7280;
-    }
-    
-    .add-comment textarea:focus {
-        border-color: #48bb78;
-        box-shadow: 0 0 0 3px rgba(72,187,120,0.2);
-    }
-    
-    .btn {
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    }
-    
-    .btn:hover {
-        box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-    }
-    
-    .errorlist {
-        background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
-        color: #fca5a5;
-        border-color: #dc2626;
-    }
-}
-
 .photo-management-section {
     border: 2px solid #6c757d;
     border-radius: 12px;
@@ -997,7 +804,75 @@ div.tool-section div.photo-carousel .dot.active {
     text-decoration: underline;
 }
 
+@media only screen and (min-width: 768px) {
+    .tool-section {
+        padding: 35px 30px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .tool-img {
+        width: 25%;
+        max-width: 250px;
+        margin-right: 25px;
+    }
+}
+
 @media (max-width: 768px) {
+    .reservation-section,
+    .reservation-block,
+    .comments-section-box {
+        padding: 18px;
+        margin: 16px 0;
+    }
+    
+    .tool-section {
+        padding: 20px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .btn-tiny {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+    
+    .reservation-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .reservation-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .comment-actions {
+        margin-left: 0;
+    }
+    
+    .tool-actions {
+        justify-content: center;
+        gap: 8px;
+    }
+
     .photo-management-section {
         padding: 20px 15px;
         margin: 20px 0;
@@ -1010,49 +885,3 @@ div.tool-section div.photo-carousel .dot.active {
     
     .photo-item img {
         height: 120px;
-    }
-    
-    .photo-overlay {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .photo-caption {
-        margin-right: 0;
-        font-size: 0.8rem;
-    }
-    
-    .delete-photo {
-        align-self: flex-end;
-        font-size: 0.75rem;
-        padding: 5px 10px;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    .photo-management-section {
-        background: linear-gradient(135deg, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.8));
-        color: #f8f9fa;
-        border-color: #4a5568;
-    }
-    
-    .photo-item {
-        background: linear-gradient(135deg, rgba(40, 40, 40, 0.8), rgba(30, 30, 30, 0.6));
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .photo-caption {
-        color: #d1d5db;
-    }
-    
-    .no-photos-message {
-        background: linear-gradient(135deg, rgba(40, 40, 40, 0.8), rgba(30, 30, 30, 0.6));
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #d1d5db;
-    }
-    
-    .no-photos-message a {
-        color: #4dabf7;
-    }
-}

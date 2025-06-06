@@ -5,64 +5,67 @@
 {% endblock %}
 {% block content %}
 <div class="tool-section">
-<div class="tool-details">
-<h1 class="section-title">{{ tool.name }}</h1>
+    <div class="tool-details">
+        <h1 class="section-title">{{ tool.name }}</h1>
 
-{% if tool.photos.all %}
-<div class="photo-carousel">
-    <div class="carousel-container">
-        {% for photo in tool.photos.all %}
-        <div class="carousel-slide {% if forloop.first %}active{% endif %}">
-            <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:tool.name }}">
-            {% if photo.caption %}
-                <p class="photo-caption">{{ photo.caption }}</p>
+        {% if tool.photos.all %}
+        <div class="photo-carousel">
+            <div class="carousel-container">
+                {% for photo in tool.photos.all %}
+                <div class="carousel-slide {% if forloop.first %}active{% endif %}">
+                    <div class="image-container">
+                        <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:tool.name }}">
+                    </div>
+                    {% if photo.caption %}
+                    <p class="photo-caption">{{ photo.caption }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if tool.photos.count > 1 %}
+            <button class="carousel-btn prev" onclick="changeSlide(-1)">❮</button>
+            <button class="carousel-btn next" onclick="changeSlide(1)">❯</button>
+
+            <div class="carousel-dots">
+                {% for photo in tool.photos.all %}
+                <span class="dot {% if forloop.first %}active{% endif %}"
+                    onclick="currentSlide({{ forloop.counter }})"></span>
+                {% endfor %}
+            </div>
             {% endif %}
         </div>
-        {% endfor %}
+        {% elif tool.image %}
+
+        <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-img" />
+        {% else %}
+
+        <div class="no-image-placeholder">
+            <span class="placeholder-icon">📷</span>
+            <p>No photos available</p>
+        </div>
+        {% endif %}
+
+        <p><strong>Available:</strong> {% if tool.is_available %}Yes{% else %}No{% endif %}</p>
+        <p><strong>Description:</strong> {{ tool.description }}</p>
+        <p><strong>Owner:</strong> {{ tool.owner }}</p>
+        <p><strong>Created:</strong> {{ tool.created_at }}</p>
+        <p><strong>Updated:</strong> {{ tool.updated_at }}</p>
+
+        {% if user.is_authenticated and tool.owner == user %}
+        <div class="tool-actions">
+            <a href="{% url 'tool-update' tool.id %}" class="btn warn">Edit</a>
+            <a href="{% url 'tool-delete' tool.id %}" class="btn danger">Delete</a>
+            <a href="{% url 'add-photos' tool.id %}" class="btn">Manage Photos</a>
+        </div>
+        {% endif %}
     </div>
-    
-    {% if tool.photos.count > 1 %}
-    <button class="carousel-btn prev" onclick="changeSlide(-1)">❮</button>
-    <button class="carousel-btn next" onclick="changeSlide(1)">❯</button>
-    
-    <div class="carousel-dots">
-        {% for photo in tool.photos.all %}
-        <span class="dot {% if forloop.first %}active{% endif %}" onclick="currentSlide({{ forloop.counter }})"></span>
-        {% endfor %}
-    </div>
-    {% endif %}
-</div>
-{% elif tool.image %}
-
-<img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="tool-img"/>
-{% else %}
-
-<div class="no-image-placeholder">
-    <span class="placeholder-icon">📷</span>
-    <p>No photos available</p>
-</div>
-{% endif %}
-
-<p><strong>Available:</strong> {% if tool.is_available %}Yes{% else %}No{% endif %}</p>
-<p><strong>Description:</strong> {{ tool.description }}</p>
-<p><strong>Owner:</strong> {{ tool.owner }}</p>
-<p><strong>Created:</strong> {{ tool.created_at }}</p>
-<p><strong>Updated:</strong> {{ tool.updated_at }}</p>
-
-{% if user.is_authenticated and tool.owner == user %}
-<div class="tool-actions">
-<a href="{% url 'tool-update' tool.id %}" class="btn warn">Edit</a>
-<a href="{% url 'tool-delete' tool.id %}" class="btn danger">Delete</a>
-<a href="{% url 'add-photos' tool.id %}" class="btn">Manage Photos</a>
-</div>
-{% endif %}
-</div>
 </div>
 
 {% if user.is_authenticated and tool.owner == user %}
 <div class="photo-management-section">
     <h2 class="section-title">Photo Management</h2>
-    
+
     {% if tool.photos.all %}
     <div class="photo-grid">
         {% for photo in tool.photos.all %}
@@ -70,167 +73,170 @@
             <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:tool.name }}" class="management-photo">
             <div class="photo-overlay">
                 <span class="photo-caption">{{ photo.caption|default:"No caption" }}</span>
-                <a href="{% url 'delete-photo' photo.id %}" class="delete-photo" onclick="return confirm('Are you sure you want to delete this photo?')">×</a>
+                <a href="{% url 'delete-photo' photo.id %}" class="delete-photo"
+                    onclick="return confirm('Are you sure you want to delete this photo?')">×</a>
             </div>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <p class="no-photos-message">No photos uploaded yet. <a href="{% url 'add-photos' tool.id %}" class="btn">Add your first photo</a></p>
+    <p class="no-photos-message">No photos uploaded yet. <a href="{% url 'add-photos' tool.id %}" class="btn">Add your
+            first photo</a></p>
     {% endif %}
 </div>
 {% endif %}
 
 {% if user.is_authenticated and tool.is_available %}
 <div class="reservation-section">
-<h2 class="section-title">Make a Reservation</h2>
-<div class="reservation-form">
-<form method="post" action="{% url 'add-reservation' tool.id %}">
- {% csrf_token %}
- {{ reservation_form.as_p }}
-<button type="submit">Reserve Tool</button>
-</form>
-</div>
+    <h2 class="section-title">Make a Reservation</h2>
+    <div class="reservation-form">
+        <form method="post" action="{% url 'add-reservation' tool.id %}">
+            {% csrf_token %}
+            {{ reservation_form.as_p }}
+            <button type="submit">Reserve Tool</button>
+        </form>
+    </div>
 </div>
 {% endif %}
 
 <div class="comments-section-box">
-<h2 class="section-title">Reservations & Comments</h2>
- {% if reservations_with_comments %}
- {% for reservation in reservations_with_comments %}
-<div class="reservation-block">
-<div class="reservation-header">
-<h3>Reservation by {{ reservation.user.username }}</h3>
-{% if user.is_authenticated and reservation.user == user %}
-<div class="reservation-actions">
-<a href="{% url 'edit-reservation' reservation.id %}" class="btn btn-small warn">Edit</a>
-<a href="{% url 'delete-reservation' reservation.id %}" class="btn btn-small danger">Delete</a>
-</div>
-{% endif %}
-</div>
-<p><strong>Period:</strong> {{ reservation.start_date|date:"M d, Y" }} to {{ reservation.end_date|date:"M d, Y" }}</p>
- {% if reservation.notes %}
-<p><strong>Notes:</strong> {{ reservation.notes }}</p>
- {% endif %}
- {% if reservation.comments.all %}
-<div class="comments">
-<h4>Comments:</h4>
- {% for comment in reservation.comments.all %}
-<div class="comment">
-<div class="comment-header">
-<strong>{{ comment.author.username }}:</strong>
-{% if user.is_authenticated and comment.author == user %}
-<div class="comment-actions">
-<a href="{% url 'edit-comment' comment.id %}" class="btn btn-tiny warn">Edit</a>
-<a href="{% url 'delete-comment' comment.id %}" class="btn btn-tiny danger">Delete</a>
-</div>
-{% endif %}
-</div>
-<p>{{ comment.content }}</p>
-<small>{{ comment.created_at|date:"M d, Y g:i A" }}</small>
-</div>
- {% endfor %}
-</div>
- {% endif %}
- {% if user.is_authenticated %}
-<div class="add-comment">
-<form method="post" action="{% url 'add-comment' reservation.id %}">
- {% csrf_token %}
-<textarea name="content" placeholder="Add a comment..." rows="3" required></textarea>
-<button type="submit">Add Comment</button>
-</form>
-</div>
- {% endif %}
-</div>
- {% endfor %}
- {% else %}
-<p>No reservations or comments yet.</p>
- {% endif %}
+    <h2 class="section-title">Reservations & Comments</h2>
+    {% if reservations_with_comments %}
+    {% for reservation in reservations_with_comments %}
+    <div class="reservation-block">
+        <div class="reservation-header">
+            <h3>Reservation by {{ reservation.user.username }}</h3>
+            {% if user.is_authenticated and reservation.user == user %}
+            <div class="reservation-actions">
+                <a href="{% url 'edit-reservation' reservation.id %}" class="btn btn-small warn">Edit</a>
+                <a href="{% url 'delete-reservation' reservation.id %}" class="btn btn-small danger">Delete</a>
+            </div>
+            {% endif %}
+        </div>
+        <p><strong>Period:</strong> {{ reservation.start_date|date:"M d, Y" }} to {{ reservation.end_date|date:"M d, Y"
+            }}</p>
+        {% if reservation.notes %}
+        <p><strong>Notes:</strong> {{ reservation.notes }}</p>
+        {% endif %}
+        {% if reservation.comments.all %}
+        <div class="comments">
+            <h4>Comments:</h4>
+            {% for comment in reservation.comments.all %}
+            <div class="comment">
+                <div class="comment-header">
+                    <strong>{{ comment.author.username }}:</strong>
+                    {% if user.is_authenticated and comment.author == user %}
+                    <div class="comment-actions">
+                        <a href="{% url 'edit-comment' comment.id %}" class="btn btn-tiny warn">Edit</a>
+                        <a href="{% url 'delete-comment' comment.id %}" class="btn btn-tiny danger">Delete</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <p>{{ comment.content }}</p>
+                <small>{{ comment.created_at|date:"M d, Y g:i A" }}</small>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <div class="add-comment">
+            <form method="post" action="{% url 'add-comment' reservation.id %}">
+                {% csrf_token %}
+                <textarea name="content" placeholder="Add a comment..." rows="3" required></textarea>
+                <button type="submit">Add Comment</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No reservations or comments yet.</p>
+    {% endif %}
 </div>
 
 <script>
-let currentSlideIndex = 0;
-const slides = document.querySelectorAll('.carousel-slide');
-const dots = document.querySelectorAll('.dot');
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
 
-function showSlide(index) {
-    if (slides.length === 0) return;
-    
-    if (index >= slides.length) currentSlideIndex = 0;
-    if (index < 0) currentSlideIndex = slides.length - 1;
-    
-    slides.forEach((slide) => {
-        slide.classList.remove('active');
-    });
-    
-    dots.forEach((dot) => {
-        dot.classList.remove('active');
-    });
-    
-    if (slides[currentSlideIndex]) {
-        slides[currentSlideIndex].classList.add('active');
+    function showSlide(index) {
+        if (slides.length === 0) return;
+
+        if (index >= slides.length) currentSlideIndex = 0;
+        if (index < 0) currentSlideIndex = slides.length - 1;
+
+        slides.forEach((slide) => {
+            slide.classList.remove('active');
+        });
+
+        dots.forEach((dot) => {
+            dot.classList.remove('active');
+        });
+
+        if (slides[currentSlideIndex]) {
+            slides[currentSlideIndex].classList.add('active');
+        }
+
+        if (dots[currentSlideIndex]) {
+            dots[currentSlideIndex].classList.add('active');
+        }
     }
-    
-    if (dots[currentSlideIndex]) {
-        dots[currentSlideIndex].classList.add('active');
+
+    function changeSlide(direction) {
+        currentSlideIndex += direction;
+        showSlide(currentSlideIndex);
     }
-}
 
-function changeSlide(direction) {
-    currentSlideIndex += direction;
-    showSlide(currentSlideIndex);
-}
+    function currentSlide(index) {
+        currentSlideIndex = index - 1;
+        showSlide(currentSlideIndex);
+    }
 
-function currentSlide(index) {
-    currentSlideIndex = index - 1;
-    showSlide(currentSlideIndex);
-}
+    let startX = 0;
+    let endX = 0;
 
-let startX = 0;
-let endX = 0;
+    const carousel = document.querySelector('.carousel-container');
+    if (carousel) {
+        carousel.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
 
-const carousel = document.querySelector('.carousel-container');
-if (carousel) {
-    carousel.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
+        carousel.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
 
-    carousel.addEventListener('touchend', (e) => {
-        endX = e.changedTouches[0].clientX;
-        handleSwipe();
-    });
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = startX - endX;
 
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = startX - endX;
-        
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                changeSlide(1);
-            } else {
-                changeSlide(-1);
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    changeSlide(1);
+                } else {
+                    changeSlide(-1);
+                }
             }
         }
     }
-}
 
-function forceResizeImages() {
-    const images = document.querySelectorAll('.carousel-slide img');
-    images.forEach(img => {
-        if (!img.classList.contains('management-photo')) {
-            img.style.maxWidth = '500px';
-            img.style.maxHeight = '375px';
-            img.style.width = 'auto';
-            img.style.height = 'auto';
-            img.style.objectFit = 'contain';
-        }
+    function forceResizeImages() {
+        const images = document.querySelectorAll('.carousel-slide img');
+        images.forEach(img => {
+            if (!img.classList.contains('management-photo')) {
+                img.style.maxWidth = '500px';
+                img.style.maxHeight = '375px';
+                img.style.width = 'auto';
+                img.style.height = 'auto';
+                img.style.objectFit = 'contain';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        forceResizeImages();
+        showSlide(0);
     });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    forceResizeImages();
-    showSlide(0);
-});
 
 </script>
 
